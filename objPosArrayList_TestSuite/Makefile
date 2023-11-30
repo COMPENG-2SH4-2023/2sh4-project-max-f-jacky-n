@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-I. -lm -g
+CFLAGS=-I. -lm -g -std=c++11
 DEPS = *.h
 OBJ = objPos.o objPosArrayList.o Test.o
 
