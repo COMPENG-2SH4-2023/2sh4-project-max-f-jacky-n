@@ -89,7 +89,6 @@ void Player::movePlayer()
             break;
         
         case RIGHT:
-
                 currentHead.x %= (mainGameMechsRef -> getBoardSizeX() - 2);
                 currentHead.x++;
             break;
@@ -97,7 +96,6 @@ void Player::movePlayer()
         case STOP:
         default:
             break;
-
     }  
 
     if (currentHead.y == 0) 
@@ -106,11 +104,11 @@ void Player::movePlayer()
     if (currentHead.x == 0) 
         currentHead.x = ((mainGameMechsRef -> getBoardSizeX())) - 1;
 
-
     for (int i = 0; i < 5; i++) {
-            if(currentHead.x == foodRef -> getFoodPos(2, i) && currentHead.y == foodRef -> getFoodPos(1, i)) {
+            if(currentHead.x == foodRef -> getFoodPos(1, i) && currentHead.y == foodRef -> getFoodPos(2, i)) {
                 playerPosList -> insertTail(currentHead);
-                foodRef -> generateFood();
+                mainGameMechsRef -> incrementScore(1);
+                foodRef -> generateFood(getPlayerPos());
                 break;
             } 
         }

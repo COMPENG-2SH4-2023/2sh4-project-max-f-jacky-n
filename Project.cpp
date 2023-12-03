@@ -47,8 +47,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
     srand(time(NULL));
-    food->generateFood();
-
+    food->generateFood(myPlayer -> getPlayerPos());
 }
 
 void GetInput(void)
@@ -94,6 +93,7 @@ void DrawScreen(void)
     // Game Board x = 30, y = 15;
 
     bool draw;
+    bool spaceFlag;
 
     objPosArrayList* playerBody = myPlayer -> getPlayerPos();
     objPos tempBody;
@@ -113,12 +113,28 @@ void DrawScreen(void)
                 }
             }
             
-            if(draw) continue;
+            if (draw) continue;
 
             if (col == 29 || col == 0 || row == 0 || row == 14)
             {
                 MacUILib_printf("#");
+                continue;
             }
+
+            for (int l = 0; l < 5; l++) {
+                if(row == food->getFoodPos(2, l) && col == food->getFoodPos(1, l)) {
+                    MacUILib_printf("%c", food->getfoodSymbol(l));
+                    draw = true;
+                    break;
+                }
+            } 
+
+            if (draw) continue;
+
+            MacUILib_printf(" ");
+                    
+            
+            /* 
             else if (row == food->getFoodPos(1, 0) && col == food->getFoodPos(2, 0))
             {
                 MacUILib_printf("%c", food->getfoodSymbol(0));
@@ -139,11 +155,7 @@ void DrawScreen(void)
             {
                 MacUILib_printf("%c", food->getfoodSymbol(4));
             }
-            
-            else
-            {
-                MacUILib_printf(" ");
-            }
+             */
         }
             MacUILib_printf("\n");
     }

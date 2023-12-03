@@ -64,7 +64,7 @@ public:
     Food();
     ~Food();
 
-    void generateFood();
+    void generateFood(objPosArrayList* refinput);
     int getFoodPos(int xy, int pos);
     char getfoodSymbol(int pos);
 };

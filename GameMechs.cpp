@@ -119,7 +119,7 @@ Food::Food()
     }
 }
 
-void Food::generateFood()
+void Food::generateFood(objPosArrayList* refinput)
 {
     int xCount = 0;
     int yCount = 0;
