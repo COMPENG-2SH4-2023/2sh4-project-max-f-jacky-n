@@ -4,11 +4,12 @@
 
 GameMechs::GameMechs()
 {
+    input = 0;
     boardSizeX = 30;
     boardSizeY = 15;
     exitFlag = false;
     loseFlag = false;
-
+    
     score = 0;
 }
 
@@ -99,9 +100,17 @@ Food::Food()
     foodBucketX = new int[5];
     foodBucketY = new int[5];
 
-    bitVx = new int[13];
-    bitVy = new int[28];
+    bitVx = new int[13]();
+    bitVy = new int[28]();
     bitVz = new int[5];
+
+    //initialize bit vectors to 0
+
+    for(int i = 0; i < 13; i++)
+        bitVx[i] = 0;
+
+    for(int i = 0; i < 28; i++) 
+        bitVy[i] = 0;
 
     for (int i = 0; i < 5; i++)
     {
@@ -176,9 +185,9 @@ void Food::generateFood()
     }
     // reset the bit vector after each use
 
-    for (int i = 0; i < 29; i++)
+    for (int i = 0; i < 28; i++)
     {
-        if (i < 14)
+        if (i < 13)
         {
             bitVx[i] = 0;
             bitVy[i] = 0;
