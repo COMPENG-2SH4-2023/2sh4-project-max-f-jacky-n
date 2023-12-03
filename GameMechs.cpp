@@ -201,11 +201,11 @@ void Food::generateFood()
 
 int Food::getFoodPos(int xy, int pos)
 {
-    if (xy == 1)
+    if (xy == 2)
     {
         return foodBucketX[pos];
     }
-    else if (xy == 2)
+    else if (xy == 1)
     {
         return foodBucketY[pos];
     }

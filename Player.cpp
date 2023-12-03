@@ -1,15 +1,18 @@
 #include "Player.h"
 
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRe, Food* thisFoodRe)
 {
-    mainGameMechsRef = thisGMRef;
+    mainGameMechsRef = thisGMRe;
+    foodRef = thisFoodRe;
+
     myDir = STOP;
 
-    //objPos tempPos ((mainGameMechsRef -> getBoardSizeX()) / 2, (mainGameMechsRef -> getBoardSizeY()) / 2, '@');
+    objPos tempPos ((mainGameMechsRef -> getBoardSizeX()) / 2, (mainGameMechsRef -> getBoardSizeY()) / 2, '@');
     
-    objPos tempPos;
+    /* objPos tempPos;
     tempPos.setObjPos((mainGameMechsRef -> getBoardSizeX()) / 2, (mainGameMechsRef -> getBoardSizeY()) / 2, '@');
+ */
 
     playerPosList = new objPosArrayList();
     playerPosList -> insertHead(tempPos);
@@ -69,7 +72,6 @@ void Player::movePlayer()
     objPos currentHead;
     playerPosList -> getHeadElement(currentHead);
 
-
     switch (myDir) {
 
         case UP:
@@ -104,8 +106,17 @@ void Player::movePlayer()
     if (currentHead.x == 0) 
         currentHead.x = ((mainGameMechsRef -> getBoardSizeX())) - 1;
 
+
+    for (int i = 0; i < 5; i++) {
+            if(currentHead.x == foodRef -> getFoodPos(2, i) && currentHead.y == foodRef -> getFoodPos(1, i)) {
+                playerPosList -> insertTail(currentHead);
+                foodRef -> generateFood();
+                break;
+            } 
+        }
+
     playerPosList -> insertHead(currentHead);
     playerPosList -> removeTail();
-
+     
 }
 

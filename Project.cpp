@@ -13,7 +13,7 @@ using namespace std;
 
 GameMechs *gameM = new GameMechs(30, 15);
 Food *food = new Food();
-Player *myPlayer = new Player(gameM);
+Player *myPlayer = new Player(gameM, food);
 
 //
 
@@ -47,6 +47,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
     srand(time(NULL));
+    food->generateFood();
 
 }
 
@@ -69,8 +70,9 @@ void RunLogic(void)
 
     myPlayer -> updatePlayerDir();
     myPlayer -> movePlayer();
+    
+    //food->generateFood();
 
-    food->generateFood();
     if (gameM->getInput() == 32)
     {
         gameM->setExitTrue();
@@ -113,7 +115,6 @@ void DrawScreen(void)
             
             if(draw) continue;
 
-
             if (col == 29 || col == 0 || row == 0 || row == 14)
             {
                 MacUILib_printf("#");
@@ -147,12 +148,12 @@ void DrawScreen(void)
             MacUILib_printf("\n");
     }
     
-    MacUILib_printf("Player Position: \n");
+/*     MacUILib_printf("Player Position: \n");
     for (int l = 0; l < playerBody -> getSize(); l++) {
         playerBody -> getElement(tempBody, l);
         MacUILib_printf("<%d, %d> ", tempBody.x, tempBody.y);
     }
-    MacUILib_printf("\n");
+    MacUILib_printf("\n"); */
 
     // Score
     MacUILib_printf("Score: %d\n", gameM->getScore());
