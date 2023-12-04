@@ -1,16 +1,19 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
+#include "objPosArrayList.h"
 #include "GameMechs.h"
+#include "Player.h"
 
 using namespace std;
 
-#define DELAY_CONST 850000
+#define DELAY_CONST 150000
 
 // Class Pointer //
 
 GameMechs *gameM = new GameMechs(30, 15);
 Food *food = new Food();
+Player *myPlayer = new Player(gameM, food);
 
 //
 
@@ -44,17 +47,18 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
     srand(time(NULL));
+    food->generateFood(myPlayer->getPlayerPos());
 }
 
 void GetInput(void)
 {
-    MacUILib_hasChar();
+    // MacUILib_hasChar();
 
-    if (MacUILib_hasChar() != 0)
+    if (MacUILib_hasChar())
     {
         gameM->setInput(MacUILib_getChar());
     }
-    else
+    else // without this else it would not display our input on the terminal
     {
         gameM->clearInput();
     }
@@ -63,7 +67,11 @@ void GetInput(void)
 void RunLogic(void)
 {
 
-    food->generateFood();
+    myPlayer->updatePlayerDir();
+    myPlayer->movePlayer();
+
+    // food->generateFood();
+
     if (gameM->getInput() == 32)
     {
         gameM->setExitTrue();
@@ -74,6 +82,8 @@ void RunLogic(void)
         gameM->setLoseTrue();
         gameM->setExitTrue();
     }
+
+    // gameM -> clearInput();
 }
 
 void DrawScreen(void)
@@ -81,23 +91,56 @@ void DrawScreen(void)
     MacUILib_clearScreen();
     // Game Board x = 30, y = 15;
 
+    bool draw;
+    bool spaceFlag;
+
+    objPosArrayList *playerBody = myPlayer->getPlayerPos();
+    objPos tempBody;
+
     for (int row = 0; row < gameM->getBoardSizeY(); row++)
     {
-
         for (int col = 0; col < gameM->getBoardSizeX(); col++)
         {
-            if (col == 29)
+
+            draw = false;
+
+            for (int k = 0; k < playerBody->getSize(); k++)
             {
-                MacUILib_printf("#\n");
+                playerBody->getElement(tempBody, k);
+
+                if (tempBody.x == col && tempBody.y == row)
+                {
+                    MacUILib_printf("%c", tempBody.symbol);
+                    draw = true;
+                    break;
+                }
             }
-            else if (row == 0 || row == 14)
+
+            if (draw)
+                continue;
+
+            if (col == 29 || col == 0 || row == 0 || row == 14)
             {
                 MacUILib_printf("#");
+                continue;
             }
-            else if (col == 0)
+
+            for (int l = 0; l < 5; l++)
             {
-                MacUILib_printf("#");
+                if (row == food->getFoodPosY(l) && col == food->getFoodPosX(l))
+                {
+                    MacUILib_printf("%c", food->getfoodSymbol(l));
+                    draw = true;
+                    break;
+                }
             }
+
+            if (draw)
+                continue;
+
+            MacUILib_printf(" ");
+
+            /*
             else if (row == food->getFoodPos(1, 0) && col == food->getFoodPos(2, 0))
             {
                 MacUILib_printf("%c", food->getfoodSymbol(0));
@@ -118,12 +161,17 @@ void DrawScreen(void)
             {
                 MacUILib_printf("%c", food->getfoodSymbol(4));
             }
-            else if (col > 0 && col < 29)
-            {
-                MacUILib_printf(" ");
-            }
+             */
         }
+        MacUILib_printf("\n");
     }
+
+    /*     MacUILib_printf("Player Position: \n");
+        for (int l = 0; l < playerBody -> getSize(); l++) {
+            playerBody -> getElement(tempBody, l);
+            MacUILib_printf("<%d, %d> ", tempBody.x, tempBody.y);
+        }
+        MacUILib_printf("\n"); */
 
     // Score
     MacUILib_printf("Score: %d\n", gameM->getScore());
@@ -147,7 +195,7 @@ void DrawScreen(void)
     // debugging
     for (int i = 0; i < 5; i++)
     {
-        MacUILib_printf("\nFood Item %d: [%d,%d]", i + 1, food->getFoodPos(1, i), food->getFoodPos(2, i));
+        MacUILib_printf("\nFood Item %d: [%d,%d]", i + 1, food->getFoodPosX(i), food->getFoodPosY(i));
     }
 }
 
@@ -162,4 +210,5 @@ void CleanUp(void)
     MacUILib_uninit();
     delete food;
     delete gameM;
+    delete myPlayer;
 }

@@ -4,6 +4,7 @@
 
 GameMechs::GameMechs()
 {
+    input = 0;
     boardSizeX = 30;
     boardSizeY = 15;
     exitFlag = false;
@@ -86,64 +87,87 @@ void GameMechs::incrementScore(int increment)
 
 Food::~Food()
 {
-    delete[] bitVx;
-    delete[] bitVy;
-    delete[] bitVz;
-    delete[] foodBucketX;
-    delete[] foodBucketY;
+    delete[] foodBucket;
+    delete[] snakePos;
 }
 
 Food::Food()
 {
-    foodSymbol = new char[5];
-    foodBucketX = new int[5];
-    foodBucketY = new int[5];
-
-    bitVx = new int[13];
-    bitVy = new int[28];
-    bitVz = new int[5];
+    snakePos = new objPos();
+    foodBucket = new objPos[5];
 
     for (int i = 0; i < 5; i++)
     {
-        foodBucketX[i] = 0;
-        foodBucketY[i] = 0;
+        foodBucket[i].x = 0;
+        foodBucket[i].y = 0;
+        foodBucket[i].symbol = '*';
     }
 }
 
-void Food::generateFood()
+void Food::generateFood(objPosArrayList *refinput)
 {
+    bool clear;
     int xCount = 0;
     int yCount = 0;
     int zCount = 0;
+    int bitVy[28];
+    int bitVx[13];
+
+    for (int i = 0; i < 28; i++)
+        bitVx[i] = 0;
+
+    for (int i = 0; i < 13; i++)
+        bitVy[i] = 0;
 
     while (xCount < 5)
     {
-        int randX = rand() % 13 + 1;
+        int randX = rand() % 28 + 1;
+        clear = false;
+        for (int i = 0; i < refinput->getSize(); i++)
+        {
+            refinput->getElement(*snakePos, i);
+            if (randX == snakePos->x)
+            {
+                clear = false;
+                continue;
+            }
+            else
+            {
+                clear = true;
+            }
+        }
 
-        if (bitVx[randX] == 0)
+        if (clear && bitVx[randX] == 0)
         {
             bitVx[randX] = 1;
-            foodBucketX[xCount] = randX;
+            foodBucket[xCount].x = randX;
             xCount++;
-        }
-        else
-        {
-            continue;
         }
     }
 
     while (yCount < 5)
     {
         int randY = rand() % 28 + 1;
-        if (bitVy[randY] == 0)
+        clear = false;
+        for (int i = 0; i < refinput->getSize(); i++)
         {
-            bitVy[randY] = 1;
-            foodBucketY[yCount] = randY;
-            yCount++;
+            refinput->getElement(*snakePos, i);
+            if (randY == snakePos->y)
+            {
+                clear = false;
+                continue;
+            }
+            else
+            {
+                clear = true;
+            }
         }
-        else
+
+        if (clear && bitVx[randY] == 0)
         {
-            continue;
+            bitVx[randY] = 1;
+            foodBucket[yCount].y = randY;
+            yCount++;
         }
     }
 
@@ -156,7 +180,7 @@ void Food::generateFood()
         if (zCount < 3)
         {
             symbol = '*';
-            foodSymbol[zCount] = symbol;
+            foodBucket[zCount].symbol = symbol;
             zCount++;
         }
         else if (zCount >= 3)
@@ -170,41 +194,35 @@ void Food::generateFood()
                 symbol = '!';
             }
 
-            foodSymbol[zCount] = symbol;
+            foodBucket[zCount].symbol = symbol;
             zCount++;
         }
     }
     // reset the bit vector after each use
 
-    for (int i = 0; i < 29; i++)
+    for (int i = 0; i < 28; i++)
     {
-        if (i < 14)
+        if (i < 13)
         {
             bitVx[i] = 0;
             bitVy[i] = 0;
         }
         else
         {
-            bitVy[i] = 0;
+            bitVx[i] = 0;
         }
     }
 }
 
-int Food::getFoodPos(int xy, int pos)
+int Food::getFoodPosX(int pos)
 {
-    if (xy == 1)
-    {
-        return foodBucketX[pos];
-    }
-    else if (xy == 2)
-    {
-        return foodBucketY[pos];
-    }
-
-    return 0;
+    return foodBucket[pos].x;
 }
-
+int Food::getFoodPosY(int pos)
+{
+    return foodBucket[pos].y;
+}
 char Food::getfoodSymbol(int pos)
 {
-    return foodSymbol[pos];
+    return foodBucket[pos].symbol;
 }

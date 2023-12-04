@@ -51,21 +51,16 @@ class Food
 {
 
 private:
-    int *foodBucketY;
-    int *foodBucketX;
-
-    char *foodSymbol; // reg = *, super = $/!;
-
-    int *bitVx;
-    int *bitVy;
-    int *bitVz;
+    objPos *foodBucket;
+    objPos *snakePos;
 
 public:
     Food();
     ~Food();
 
-    void generateFood();
-    int getFoodPos(int xy, int pos);
+    void generateFood(objPosArrayList *refinput);
+    int getFoodPosX(int pos);
+    int getFoodPosY(int pos);
     char getfoodSymbol(int pos);
 };
 
