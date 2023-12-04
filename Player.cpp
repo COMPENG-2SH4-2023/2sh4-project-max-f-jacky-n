@@ -64,6 +64,7 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
+    objPos tempPos;
 
     objPos currentHead;
     playerPosList->getHeadElement(currentHead);
@@ -100,6 +101,14 @@ void Player::movePlayer()
 
     if (currentHead.x == 0)
         currentHead.x = ((mainGameMechsRef->getBoardSizeX())) - 1;
+
+    for (int i = 1; i < playerPosList -> getSize(); i++) {
+            playerPosList -> getElement(tempPos, i);
+            if(currentHead.x == tempPos.x && currentHead.y == tempPos.y) {
+                mainGameMechsRef -> setLoseTrue();
+            }
+
+        }
 
     for (int i = 0; i < 5; i++)
     {
