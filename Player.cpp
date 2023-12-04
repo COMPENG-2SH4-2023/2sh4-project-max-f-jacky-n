@@ -83,7 +83,6 @@ void Player::movePlayer()
     case DOWN:
         currentHead.y %= (mainGameMechsRef->getBoardSizeY() - 2);
         currentHead.y++;
-
         break;
 
     case RIGHT:
@@ -97,10 +96,10 @@ void Player::movePlayer()
     }
 
     if (currentHead.y == 0)
-        currentHead.y = ((mainGameMechsRef->getBoardSizeY())) - 1;
+        currentHead.y = ((mainGameMechsRef->getBoardSizeY()) - 2);
 
     if (currentHead.x == 0)
-        currentHead.x = ((mainGameMechsRef->getBoardSizeX())) - 1;
+        currentHead.x = ((mainGameMechsRef->getBoardSizeX()) - 2);
 
     for (int i = 1; i < playerPosList -> getSize(); i++) {
             playerPosList -> getElement(tempPos, i);
