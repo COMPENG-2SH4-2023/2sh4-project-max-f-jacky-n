@@ -147,7 +147,7 @@ void Food::generateFood(objPosArrayList *refinput)
 
     while (yCount < 5)
     {
-        int randY = rand() % 28 + 1;
+        int randY = rand() % 13 + 1;
         clear = false;
         for (int i = 0; i < refinput->getSize(); i++)
         {
@@ -163,9 +163,9 @@ void Food::generateFood(objPosArrayList *refinput)
             }
         }
 
-        if (clear && bitVx[randY] == 0)
+        if (clear && bitVy[randY] == 0)
         {
-            bitVx[randY] = 1;
+            bitVy[randY] = 1;
             foodBucket[yCount].y = randY;
             yCount++;
         }
