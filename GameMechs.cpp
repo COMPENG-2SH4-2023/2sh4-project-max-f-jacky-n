@@ -124,7 +124,7 @@ void Food::generateFood(objPosArrayList* refinput)
     int xCount = 0;
     int yCount = 0;
     int zCount = 0;
-
+    zCount = refinput -> getSize();
     while (xCount < 5)
     {
         int randX = rand() % 13 + 1;

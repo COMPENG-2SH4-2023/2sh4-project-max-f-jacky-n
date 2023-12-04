@@ -70,6 +70,8 @@ void Player::movePlayer()
     // PPA3 Finite State Machine logic
 
     objPos currentHead;
+    objPos tempPos;
+
     playerPosList -> getHeadElement(currentHead);
 
     switch (myDir) {
@@ -103,6 +105,14 @@ void Player::movePlayer()
 
     if (currentHead.x == 0) 
         currentHead.x = ((mainGameMechsRef -> getBoardSizeX())) - 1;
+
+        for (int i = 1; i < playerPosList -> getSize(); i++) {
+            playerPosList -> getElement(tempPos, i);
+            if(currentHead.x == tempPos.x && currentHead.y == tempPos.y) {
+                mainGameMechsRef -> setLoseTrue();
+            }
+
+        }
 
     for (int i = 0; i < 5; i++) {
             if(currentHead.x == foodRef -> getFoodPos(1, i) && currentHead.y == foodRef -> getFoodPos(2, i)) {
