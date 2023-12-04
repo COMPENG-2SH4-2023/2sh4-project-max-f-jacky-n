@@ -107,15 +107,29 @@ void Player::movePlayer()
             if(currentHead.x == tempPos.x && currentHead.y == tempPos.y) {
                 mainGameMechsRef -> setLoseTrue();
             }
-
         }
 
     for (int i = 0; i < 5; i++)
-    {
+    {   
         if (currentHead.x == foodRef->getFoodPosX(i) && currentHead.y == foodRef->getFoodPosY(i))
         {
+            if (foodRef -> getfoodSymbol(i) == '!') {
+                playerPosList->insertTail(currentHead);
+                mainGameMechsRef->incrementScore(10);
+                foodRef->generateFood(getPlayerPos());
+                break;
+
+            } else if (foodRef -> getfoodSymbol(i) == '$') {
+                playerPosList->insertHead(currentHead);
+                playerPosList->insertHead(currentHead);
+                playerPosList->insertHead(currentHead);
+                mainGameMechsRef->incrementScore(3);
+                foodRef->generateFood(getPlayerPos());
+                break;
+
+            }
             playerPosList->insertTail(currentHead);
-            mainGameMechsRef->incrementScore(1);
+            mainGameMechsRef->incrementScore(3);
             foodRef->generateFood(getPlayerPos());
             break;
         }

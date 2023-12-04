@@ -184,19 +184,25 @@ void DrawScreen(void)
         MacUILib_printf(
             "\n\nYou ran into yourself.\nYou lose!");
     }
-    else
+
+    if (gameM->getExitFlagStatus() == true)
     {
-        if (gameM->getExitFlagStatus() == true)
-        {
-            MacUILib_printf("\nGame Stopped.");
-        }
+        MacUILib_printf("\nGame Stopped.");
     }
 
-    // debugging
+    if (gameM->getScore() >= 50 && !(gameM -> getLoseFlagStatus()))
+    {
+        MacUILib_clearScreen();
+        MacUILib_printf("\nCongratulations! You Won!");
+        
+        gameM->setExitTrue();
+    }
+
+    /* // debugging
     for (int i = 0; i < 5; i++)
     {
         MacUILib_printf("\nFood Item %d: [%d,%d]", i + 1, food->getFoodPosX(i), food->getFoodPosY(i));
-    }
+    } */
 }
 
 void LoopDelay(void)
